@@ -101,7 +101,7 @@ public:
         //resize
         // if load factor exceeds 0.8
         // RESIZE CHECKER
-        float resizeChecker = (float)(n+1) > 0.8 * tsize;
+        float resizeChecker = (float)(n+1)/tsize;
         cout << resizeChecker << "is the resize value" << endl;
         if ((float)(n+1) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
         {
