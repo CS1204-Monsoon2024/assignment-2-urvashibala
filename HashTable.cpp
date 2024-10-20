@@ -98,15 +98,6 @@ public:
 
     void insert(int key) 
     {
-        //resize
-        // if load factor exceeds 0.8
-        // RESIZE CHECKER
-        float resizeChecker = (float)(n+1)/tsize;
-        cout << resizeChecker << "is the resize value" << endl;
-        if ((float)(n+1) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
-        {
-            resizer(tsize); // input old/original array size
-        }
 
         int index = hash(key, tsize); // initial hash index
         int i = 1; // quadratic probing counter var
@@ -127,6 +118,16 @@ public:
 
         arr[index] = key; // insert (slot found)
         n++;
+
+        //resize
+        // if load factor exceeds 0.8
+        // RESIZE CHECKER
+        float resizeChecker = (float)(n+1)/tsize;
+        cout << resizeChecker << "is the resize value" << endl;
+        if ((float)(n) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
+        {
+            resizer(tsize); // input old/original array size
+        }
     }
 
     void remove(int key) {
