@@ -2,12 +2,13 @@
 #include <iostream>
 using namespace std;
 
-public class HashTable
+class HashTable
 {
     int tsize; // size of hash table = no. of indices
     int n; // no. of elements to be hashed = no. of keys
     int *arr; // hashtable array. indices of array, values stored at arr[index]
 
+public:
     HashTable(int tablesize)
     {
         tsize = tablesize;
