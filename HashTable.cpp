@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class HashTable
+class HashTable2
 
 {
     int tsize; // size of hash table = no. of indices
@@ -14,7 +14,7 @@ class HashTable
 
 public:
 
-    HashTable(int tablesize)
+    HashTable2(int tablesize)
     {
         tsize = tablesize;
         arr = new int[tsize]; // all elements have no default value
@@ -24,7 +24,7 @@ public:
 
         // initialise default value of 0 for all array elements
 
-        for (int i = 0; i < tsize; i++) 
+        for (int i = 0; i < tsize; i++)
         {
             arr[i] = 0;
         }    
@@ -44,18 +44,13 @@ public:
     // helper functions for resizer()
     bool isPrime(int a)
     {
-        if(a<2){return false;} // negative no.s & no.s less than 2 can't be prime
-        for(int i = 2; i < sqrt(a); i++) // only check till root n
-        {
-            if(a%i==0)
-            {
+        if (a <= 1)
+        return false;
 
-                // then not prime
-
+        // Check divisibility from 2 to a-1
+        for (int i = 2; i < a; i++)
+            if (a % i == 0)
                 return false;
-
-            }
-        }
         return true;
     }
 
@@ -66,7 +61,6 @@ public:
         {
             a++; // check next number (updation)
         }
-
         // exits loop only when the number we found is not prime
         return a;
     }
@@ -82,6 +76,7 @@ public:
             // not prime, so find the next prime number and update newsize
             newsize = nextPrimeFinder(newsize);
         }
+       
 
         // create new array (hashtable) of this newsize
         arr = new int[newsize]; // create a new array with the new size
@@ -90,7 +85,7 @@ public:
         tsize = newsize;
 
         // initialise all new array elements to zero
-        for (int i = 0; i < tsize; i++) 
+        for (int i = 0; i < tsize; i++)
         {
             arr[i] = 0;
         }
@@ -112,18 +107,19 @@ public:
         delete[] oldArr;
     }
 
-    void insert(int key) 
+    void insert(int key)
     {
         //resize
         // if load factor exceeds 0.8
         // RESIZE CHECKER
         //cout << resizeChecker << "is the resize value" << endl;
+
         if(flag==1)
         {
             resizer(tsize); // input old/original array size
             flag = 0;
         }
-
+       
         if ((float)(n+1) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
         {
             flag = 1;
@@ -157,7 +153,7 @@ public:
         // Quadratic probing to find the key
 
         while (arr[index] != 0) {
-            if (arr[index] == key) 
+            if (arr[index] == key)
 
             {
                 arr[index] = -999; // mark slot as deleted -999 not 0 otherwise breaks probing sequence
