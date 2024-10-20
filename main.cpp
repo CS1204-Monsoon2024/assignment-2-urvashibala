@@ -1,27 +1,43 @@
 #include "HashTable.cpp"
+#include <cmath>
+#include <iostream>
+using namespace std;
+
 class HashTable
 {
     int tsize; // size of hash table = no. of indices
     int n; // no. of elements to be hashed = no. of keys
-    int arr; // hashtable array. indices of array, values stored at arr[index]
+    int *arr; // hashtable array. indices of array, values stored at arr[index]
+
+    HashTable(int tablesize)
+    {
+        tsize = tablesize;
+        arr = new int[tsize]; // all elements have no default value
+        n = 0;
+        
+        // initialise default value of 0 for all array elements
+        for (int i = 0; i < tsize; i++) 
+        {
+            arr[i] = 0;
+        }    
+    }
 
     /*
     Use open addressing with quadratic probing!
     Use an array data structure. When it gets too full (load factor>0.8), make a new array of new size
-
     */
-
-    int hash(int key)
+   
+    int hash(int key, int size)
     {
         // h(k) = k % size of table
-        return key%tsize;
+        return key%size;
     }
 
     // helper functions for resizer()
     bool isPrime(int a)
     {
         if(a<0){return false;} // negative no.s can't be prime
-        for(int i = 2; i<sqrt(a); i++) // only check till root n
+        for(int i = 2; i < sqrt(a); i++) // only check till root n
         {
             if(a%i==0)
             {
@@ -43,115 +59,147 @@ class HashTable
         return a;
     }
 
-       void resizer()
+    void resizer(int ogsize)
     {
+        // store old array pointer, figure out size of new array (hashtable)
+        int *oldArr = arr;
 
-        /**
-         * threshold of α = 0.8, beyond which the table resizes to approximately double its
-        current size. When resizing, remember to rehash all existing keys into the new table of larger
-        size to maintain consistency.
+        int newsize = ogsize*2;
+
+        if(!isPrime(newsize))
+        {
+            // not prime, so find the next prime number and update newsize
+            newsize = nextPrimeFinder(newsize);
+        }
+
+        // create new array (hashtable) of this newsize
+        arr = new int[newsize]; // create a new array with the new size
+        
+        // update tsize
+        tsize = newsize;
+        
+        // initialise all new array elements to zero
+        for (int i = 0; i < tsize; i++) 
+        {
+            arr[i] = 0;
+        }
+
+        // WHEN REHASHING ELEMENTS
+        // DO I USE OLD ARRAY OR NEW ARRAY SIZE?????
+        int old_n = n; // save current number of elements
+        n = 0; // reset so we don't increase during rehash
+
+        // rehash all elements from old array to new array
+        for (int i = 0; i < ogsize; i++) {
+            if (oldArr[i] != 0) { // only reinsert valid, unempty keys
+                insert(oldArr[i]); // rehash and insert each key into the new array (still called arr)
+                // initially was insert(arr[], oldArr[i]);
+            }
+        }
+
+        /**DELETE THE NEXT PART DEPENDING ON HOW WE REHASH(DOUBT?)
+         *
         */
+       n = old_n; //restore original element count in n
 
-       // FINISH THIS FUNCTION
+        // free up old array space
+        delete[] oldArr;
     }
 
-
-    void insert(T, int key, int value)
+    void insert(int key) 
     {
-        // check if load factor is reached yet
-        // must be n/tsize >= 0.8 => n>=0.8*tsize
-        if(n>=0.8*tsize)
+        //resize
+        // if load factor exceeds 0.8
+        if (n > 0.8 * tsize) 
         {
-            // if load factor (alpha) is over 0.8, then resize
-            ht.resizer(arr.length); // passes current
-
+            resizer(tsize); // input old/original array size
         }
 
-        int index = hash(key);
-        bool alr_exists = false;
+        int index = hash(key, tsize); // initial hash index
+        int i = 1; // quadratic probing counter var
 
 
-        if(T[index] == nullptr) // if index doesn't exist, ie, index==NULL (case 1)
+        // this while loop is only entered if the current position is non-empty
+        while (arr[index] != 0) // when it finds zero, ie, an empty slot, break out of loop
         {
-            // create new node at this index
-            T[index] = new Node(key, value);
+            index = (key + (i * i)) % tsize; // quad probing formula
+            i++;
+
+            // avoid infinite loops. if program has probed more than the table size, break
+            if (i >= tsize) {
+                cout << "Max probing limit reached!" << key << endl;
+                return;
+            }
         }
-        else // if index node exists
-        {
-            // open addressing with quadratic probing
-            (while)            
-           
-        }
+
+        arr[index] = key; // insert (slot found)
+        n++; // increment no. of elements var
+
     }
 
-    void remove(Node* T, int key, int value)
-    { 
-        int index = hash(key);
-        bool alr_exists = false;
+    void remove(int key) {
+        int index = hash(key,tsize); // Initial hash index
+        int i = 1; // loop var
 
-        if(T[index] == nullptr) // if index doesn't exist, ie, index==NULL (case 1)
-        {
-            // no node exists -- error case
-            std::cout << "Element not found" << std::endl;
-
-        }
-        else // if index node exists
-        {
-            Node* current = T[index]; // temp traversal node "current"
-            Node* prev = nullptr;  // node pointer to prev node
-
-            //loop until last node (traverse LL)
-            while(current->next!=nullptr)
+        // Quadratic probing to find the key
+        while (arr[index] != 0) {
+            if (arr[index] == key) 
             {
-                // check if the current node's key is the one inputted
-                if(current->key == key)
-                {
-                    // we've found the node key!
-                    // mark it as alr exists
-                    alr_exists = true;
-
-                    // 3 cases. 
-                    // case 1: we have to delete the head node
-                    if(current->prev = nullptr)
-                    {
-                        T[index] = current->next; // we want to delete item at index. 
-                        // we set it to the next node
-                    }
-                    else if(current->next = nullptr) // tail node to be deleted
-                    {
-                        current->prev = nullptr;
-                    }
-                    else
-                    {
-                        // specific middle node to be deleted
-                        prev->next = current->next;
-                    }
-
-                    free(current); // ??? CHECK IF THIS MAKES SENSE
-
-                }
-                // loop updation
-                current = current->next;
+                arr[index] = -999; // mark slot as deleted -999 not 0 otherwise breaks probing sequence
+                n--; // decrement no. of elements
+                return;
             }
-            if(alr_exists==false)
-            {
-                // no such node exists -- error case
-                std::cout << "Element not found" << std::endl;
-            }
+            index = (key + i * i) % tsize; // quadratic probing formula
+            i++;
 
+            if (i >= tsize) {
+                cout << "Element not found" << endl;
+                return;
+            }
         }
+        cout << "Element not found" << endl;
     }
 
-    void search()
+    int search(int key)
     {
+        int index = hash(key, tsize); // initial hash index
+        int i = 1; // quadratic probing counter var
 
+        // this while loop is only entered if the current position is non-empty
+        while (arr[index] != 0) // when it finds zero, ie, an empty slot, break out of loop
+        {
+            index = (key + (i * i)) % tsize; // quad probing formula
+            i++;
+
+            // avoid infinite loops. if program has probed more than the table size, break
+            if (i >= tsize) {
+                cout << "Max probing limit reached!" << key << endl;
+                return -1; //error message
+            }
+        }
+
+        return arr[index]; // value found
     }
 
-printTable()
+    void printTable()
+    {
+        // print array with conditional statements for _ (empty/deleted)
+        for(int i = 0; i<tsize; i++)
+        {
+            if(arr[i] == -999 || arr[i] == -1 || arr[i] == 0)
+            {
+                cout << "-"; 
+            }
+            else
+            {
+                cout << arr[i];
+            }
+            cout << " "; //space
+        }
+        cout << endl; // go to next line after printing full table
+    }
 
-# hash f = key mod the size
-
-int main() {
+    static int main() {
     int initialSize = 7; 
     HashTable ht(initialSize);
 
@@ -174,4 +222,4 @@ int main() {
 
     return 0;
 }
-} // end of class -- why error
+};
