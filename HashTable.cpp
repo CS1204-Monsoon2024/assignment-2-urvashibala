@@ -102,6 +102,7 @@ public:
         // if load factor exceeds 0.8
         cout << "RESIZE CHECKER" << (float)n/tsize << endl;
         float alpha = float(n)/tsize;
+        bool checker = alpha>0.8;
 
         if (alpha>0.8)
         {
