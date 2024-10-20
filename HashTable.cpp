@@ -36,7 +36,7 @@ public:
     // helper functions for resizer()
     bool isPrime(int a)
     {
-        if(a<0){return false;} // negative no.s can't be prime
+        if(a<2){return false;} // negative no.s & no.s less than 2 can't be prime
         for(int i = 2; i < sqrt(a); i++) // only check till root n
         {
             if(a%i==0)
@@ -110,7 +110,7 @@ public:
 
 
         // this while loop is only entered if the current position is non-empty
-        while (arr[index] != 0 && arr[index!=-999]) // when it finds zero, ie, an empty slot, break out of loop
+        while (arr[index] != 0 && arr[index]!=-999) // when it finds zero (empty slot) or deleted slot (-999) break out of loop
         {
             index = (key + (i * i)) % tsize; // quad probing formula
             i++;
@@ -158,7 +158,7 @@ public:
         // this while loop is only entered if the current position is non-empty
         while (arr[index] != 0) // when it finds zero, ie, an empty slot, break out of loop
         {
-            if(arr[index]== -999 && arr[index] == key)
+            if(arr[index] == key)
             {
                 return index; // key found!
             }
