@@ -1,23 +1,29 @@
 #include <cmath>
 #include <iostream>
+
 using namespace std;
 
 class HashTable
+
 {
     int tsize; // size of hash table = no. of indices
     int n; // no. of elements to be hashed = no. of keys
     int *arr; // hashtable array. indices of array, values stored at arr[index]
     int flag;
 
+
 public:
+
     HashTable(int tablesize)
     {
         tsize = tablesize;
         arr = new int[tsize]; // all elements have no default value
         n = 0;
         flag = 0;
-        
+
+
         // initialise default value of 0 for all array elements
+
         for (int i = 0; i < tsize; i++) 
         {
             arr[i] = 0;
@@ -28,7 +34,7 @@ public:
     Use open addressing with quadratic probing!
     Use an array data structure. When it gets too full (load factor>0.8), make a new array of new size
     */
-   
+
     int hash(int key, int size)
     {
         // h(k) = k % size of table
@@ -43,8 +49,11 @@ public:
         {
             if(a%i==0)
             {
+
                 // then not prime
+
                 return false;
+
             }
         }
         return true;
@@ -57,6 +66,7 @@ public:
         {
             a++; // check next number (updation)
         }
+
         // exits loop only when the number we found is not prime
         return a;
     }
@@ -65,7 +75,6 @@ public:
     {
         // store old array pointer, figure out size of new array (hashtable)
         int *oldArr = arr;
-
         int newsize = ogsize*2;
 
         if(!isPrime(newsize))
@@ -76,10 +85,10 @@ public:
 
         // create new array (hashtable) of this newsize
         arr = new int[newsize]; // create a new array with the new size
-        
+
         // update tsize
         tsize = newsize;
-        
+
         // initialise all new array elements to zero
         for (int i = 0; i < tsize; i++) 
         {
@@ -88,10 +97,15 @@ public:
 
         // rehash all elements from old array to new array
         for (int i = 0; i < ogsize; i++) {
+
             if (oldArr[i] != 0 && oldArr[i]!=-999) { // only reinsert valid, unempty keys
+
                 insert(oldArr[i]); // rehash and insert each key into the new array (still called arr)
+
                 // initially was insert(arr[], oldArr[i]);
+
             }
+
         }
 
         // free up old array space
@@ -110,7 +124,7 @@ public:
             flag = 0;
         }
 
-        if ((float)(n+1) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
+        if ((float)(n) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
         {
             flag = 1;
         }
@@ -131,23 +145,26 @@ public:
                 return;
             }
         }
-
         arr[index] = key; // insert (slot found)
-        n++;
+        n++; // increment no. of elements var
     }
 
     void remove(int key) {
+
         int index = hash(key,tsize); // Initial hash index
         int i = 1; // loop var
 
         // Quadratic probing to find the key
+
         while (arr[index] != 0) {
             if (arr[index] == key) 
+
             {
                 arr[index] = -999; // mark slot as deleted -999 not 0 otherwise breaks probing sequence
                 n--; // decrement no. of elements
                 return;
             }
+
             index = (key + i * i) % tsize; // quadratic probing formula
             i++;
 
@@ -155,6 +172,7 @@ public:
                 cout << "Element not found" << endl;
                 return;
             }
+
         }
         cout << "Element not found" << endl;
     }
@@ -180,22 +198,33 @@ public:
                 cout << "Max probing limit reached!" << key << endl;
                 return -1; //error message
             }
+
         }
 
         return -1; // value found
-    }
 
+    }
 
     void printTable()
     {
+
     // print array with conditional statements for _ (empty/deleted)
     for (int i = 0; i < tsize; i++) {
+
         if (arr[i] == -999 || arr[i] == 0) {
+
             cout << "- "; // empty or deleted slot
+
         } else {
+
             cout << arr[i] << " "; // filled slot
+
         }
+
     }
+
     cout << endl; // go to next line after printing full table
+
     }
+
 };
