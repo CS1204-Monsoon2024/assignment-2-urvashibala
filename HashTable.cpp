@@ -171,21 +171,17 @@ public:
         return arr[index]; // value found
     }
 
+
     void printTable()
     {
-        // print array with conditional statements for _ (empty/deleted)
-        for(int i = 0; i<tsize; i++)
-        {
-            if(arr[i] == -999 || arr[i] == -1 || arr[i] == 0)
-            {
-                cout << "-"; 
-            }
-            else
-            {
-                cout << arr[i];
-            }
-            cout << " "; //space
+    // print array with conditional statements for _ (empty/deleted)
+    for (int i = 0; i < tsize; i++) {
+        if (arr[i] == -999 || arr[i] == 0) {
+            cout << "- "; // empty or deleted slot
+        } else {
+            cout << arr[i] << " "; // filled slot
         }
-        cout << endl; // go to next line after printing full table
+    }
+    cout << endl; // go to next line after printing full table
     }
 };
