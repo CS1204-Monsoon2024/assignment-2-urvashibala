@@ -98,9 +98,10 @@ public:
 
     void insert(int key) 
     {
-        n++; // increment before insert, so resizing happens correctly
-        //resize if load factor exceeds 0.8
-        if (float(n/tsize))
+        n++;
+        //resize
+        // if load factor exceeds 0.8
+        if ((float)n > 0.8 * tsize) 
         {
             resizer(tsize); // input old/original array size
         }
@@ -123,7 +124,6 @@ public:
         }
 
         arr[index] = key; // insert (slot found)
-
     }
 
     void remove(int key) {
