@@ -100,6 +100,7 @@ public:
     {
         //resize
         // if load factor exceeds 0.8
+        cout << (float)n/tsize;
         if ((float)n > 0.8 * tsize) 
         {
             resizer(tsize); // input old/original array size
