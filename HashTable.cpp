@@ -98,6 +98,13 @@ public:
 
     void insert(int key) 
     {
+        //resize
+        // if load factor exceeds 0.8
+        if ((float)n > 0.8 * tsize) 
+        {
+            resizer(tsize); // input old/original array size
+        }
+
         int index = hash(key, tsize); // initial hash index
         int i = 1; // quadratic probing counter var
 
@@ -118,12 +125,6 @@ public:
         arr[index] = key; // insert (slot found)
         n++; // increment no. of elements var
 
-        //resize
-        // if load factor exceeds 0.8
-        if ((float)n > 0.8 * tsize) 
-        {
-            resizer(tsize); // input old/original array size
-        }
     }
 
     void remove(int key) {
