@@ -7,6 +7,7 @@ class HashTable
     int tsize; // size of hash table = no. of indices
     int n; // no. of elements to be hashed = no. of keys
     int *arr; // hashtable array. indices of array, values stored at arr[index]
+    int flag;
 
 public:
     HashTable(int tablesize)
@@ -14,6 +15,7 @@ public:
         tsize = tablesize;
         arr = new int[tsize]; // all elements have no default value
         n = 0;
+        flag = 0;
         
         // initialise default value of 0 for all array elements
         for (int i = 0; i < tsize; i++) 
@@ -98,6 +100,20 @@ public:
 
     void insert(int key) 
     {
+        //resize
+        // if load factor exceeds 0.8
+        // RESIZE CHECKER
+        //cout << resizeChecker << "is the resize value" << endl;
+        if(flag==1)
+        {
+            resizer(tsize); // input old/original array size
+            flag = 0;
+        }
+
+        if ((float)(n) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
+        {
+            flag = 1;
+        }
 
         int index = hash(key, tsize); // initial hash index
         int i = 1; // quadratic probing counter var
@@ -118,16 +134,6 @@ public:
 
         arr[index] = key; // insert (slot found)
         n++;
-
-        //resize
-        // if load factor exceeds 0.8
-        // RESIZE CHECKER
-        float resizeChecker = (float)(n+1)/tsize;
-        cout << resizeChecker << "is the resize value" << endl;
-        if ((float)(n) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
-        {
-            resizer(tsize); // input old/original array size
-        }
     }
 
     void remove(int key) {
