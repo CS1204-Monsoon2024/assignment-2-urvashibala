@@ -86,7 +86,7 @@ public:
 
         // rehash all elements from old array to new array
         for (int i = 0; i < ogsize; i++) {
-            if (oldArr[i] != 0) { // only reinsert valid, unempty keys
+            if (oldArr[i] != 0 && oldArr[i]!=-999) { // only reinsert valid, unempty keys
                 insert(oldArr[i]); // rehash and insert each key into the new array (still called arr)
                 // initially was insert(arr[], oldArr[i]);
             }
@@ -110,7 +110,7 @@ public:
 
 
         // this while loop is only entered if the current position is non-empty
-        while (arr[index] != 0) // when it finds zero, ie, an empty slot, break out of loop
+        while (arr[index] != 0 && arr[index!=-999]) // when it finds zero, ie, an empty slot, break out of loop
         {
             index = (key + (i * i)) % tsize; // quad probing formula
             i++;
@@ -158,6 +158,11 @@ public:
         // this while loop is only entered if the current position is non-empty
         while (arr[index] != 0) // when it finds zero, ie, an empty slot, break out of loop
         {
+            if(arr[index]== -999 && arr[index] == key)
+            {
+                return index; // key found!
+            }
+
             index = (key + (i * i)) % tsize; // quad probing formula
             i++;
 
@@ -168,7 +173,7 @@ public:
             }
         }
 
-        return arr[index]; // value found
+        return -1; // value found
     }
 
 
