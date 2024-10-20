@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-class HashTable
+public class HashTable
 {
     int tsize; // size of hash table = no. of indices
     int n; // no. of elements to be hashed = no. of keys
