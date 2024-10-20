@@ -60,43 +60,47 @@ public:
     }
 
     void resizer(int ogsize)
-{
-    int *oldArr = arr;
-    int newsize = ogsize * 2;
+    {
+        // store old array pointer, figure out size of new array (hashtable)
+        int *oldArr = arr;
 
-    if (!isPrime(newsize)) {
-        newsize = nextPrimeFinder(newsize);
-    }
+        int newsize = ogsize*2;
 
-    cout << "Resizing from " << ogsize << " to " << newsize << endl; // Debugging
-
-    arr = new int[newsize];
-    tsize = newsize;
-
-    for (int i = 0; i < tsize; i++) {
-        arr[i] = 0;
-    }
-
-    int old_n = n;
-    n = 0;
-
-    for (int i = 0; i < ogsize; i++) {
-        if (oldArr[i] != 0 && oldArr[i] != -999) {
-            insert(oldArr[i]);
+        if(!isPrime(newsize))
+        {
+            // not prime, so find the next prime number and update newsize
+            newsize = nextPrimeFinder(newsize);
         }
+
+        // create new array (hashtable) of this newsize
+        arr = new int[newsize]; // create a new array with the new size
+        
+        // update tsize
+        tsize = newsize;
+        
+        // initialise all new array elements to zero
+        for (int i = 0; i < tsize; i++) 
+        {
+            arr[i] = 0;
+        }
+
+        // rehash all elements from old array to new array
+        for (int i = 0; i < ogsize; i++) {
+            if (oldArr[i] != 0) { // only reinsert valid, unempty keys
+                insert(oldArr[i]); // rehash and insert each key into the new array (still called arr)
+                // initially was insert(arr[], oldArr[i]);
+            }
+        }
+
+        // free up old array space
+        delete[] oldArr;
     }
-
-    n = old_n;
-
-    delete[] oldArr;
-}
-
 
     void insert(int key) 
     {
         //resize
         // if load factor exceeds 0.8
-        if (n > 0.8 * tsize) 
+        if ((float)n > 0.8 * tsize) 
         {
             resizer(tsize); // input old/original array size
         }
