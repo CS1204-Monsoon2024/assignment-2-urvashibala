@@ -101,7 +101,9 @@ public:
         //resize
         // if load factor exceeds 0.8
         cout << "RESIZE CHECKER" << (float)n/tsize << endl;
-        if ((float)n/tsize > 0.8) 
+        float alpha = float(n)/tsize;
+
+        if (alpha>0.8)
         {
             resizer(tsize); // input old/original array size
         }
