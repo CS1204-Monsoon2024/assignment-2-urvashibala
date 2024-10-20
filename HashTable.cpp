@@ -110,7 +110,7 @@ public:
             flag = 0;
         }
 
-        if ((float)(n) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
+        if ((float)(n+1) > 0.8 * tsize) // n+1 because we're inserting a new element but haven't yet incremented n
         {
             flag = 1;
         }
