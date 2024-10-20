@@ -98,6 +98,7 @@ public:
 
     void insert(int key) 
     {
+        n++; // increment before insert, so resizing happens correctly
         //resize
         // if load factor exceeds 0.8
         cout << "RESIZE CHECKER" << (float)n/tsize << endl;
@@ -127,7 +128,6 @@ public:
         }
 
         arr[index] = key; // insert (slot found)
-        n++; // increment no. of elements var
 
     }
 
