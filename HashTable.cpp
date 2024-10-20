@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class HashTable2
+class HashTable
 
 {
     int tsize; // size of hash table = no. of indices
@@ -14,7 +14,7 @@ class HashTable2
 
 public:
 
-    HashTable2(int tablesize)
+    HashTable(int tablesize)
     {
         tsize = tablesize;
         arr = new int[tsize]; // all elements have no default value
